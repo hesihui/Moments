@@ -8,6 +8,9 @@ import reducers from "./reducers";
 
 import App from './App';
 import './index.css';
+
+// for more background pic: https://www.svgbackgrounds.com/
+
 const store = createStore(reducers, compose(applyMiddleware(thunk)));
 
 ReactDOM.render(
