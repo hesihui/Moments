@@ -3,8 +3,10 @@ import bodyParse from 'body-parser';
 import mongoose from "mongoose";
 import cors from 'cors';
 import postRoutes from "./routes/posts.js";
+import dotenv from 'dotenv';
 
 const app = express();
+dotenv.config();
 
 // set up uploaded limit: not excceed 30mb
 app.use(bodyParse.json({ limit: "30mb", extended: true }));
@@ -15,9 +17,8 @@ app.use(cors());
 // localhost:5000/posts
 app.use('/posts', postRoutes);
 
-const CONNECTION_URL =
-    "mongodb+srv://sardar:sardar960702@cluster0.sawzgaz.mongodb.net/?retryWrites=true&w=majority";
 const PORT = process.env.PORT || 5000;
+const CONNECTION_URL = process.env.CONNECTION_URL;
 
 mongoose.connect(CONNECTION_URL, { useNewUrlParser: true,
     useUnifiedTopology: true})

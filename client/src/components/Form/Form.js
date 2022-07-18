@@ -8,7 +8,7 @@ import { createPost, updatePost } from "../../actions/posts";
 
 // NEED: GET THE CURRENT ID
 
-const Form = ({currentId, setCurrentId}) => {
+const Form = ({ currentId, setCurrentId }) => {
     const [postData, setPostData] = useState({
         creator: '', title: '', message: '', tags: '', selectedFile: ''
     });
@@ -25,20 +25,27 @@ const Form = ({currentId, setCurrentId}) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (currentId) {
+            // if current post id exists, just update
             dispatch(updatePost(currentId, postData));
+            clear();
         } else {
+            // otherwise, it's a create task
             dispatch(createPost(postData));
+            clear();
         }
     }
 
     const clear = () => {
+        setCurrentId(0);
+        setPostData(
+            { creator: '', title: '', message: '', tags: '', selectedFile: '' });
+    };
 
-    }
 
     return (
         <Paper className={classes.paper} s>
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
-                <Typography variant="h6" > Creating a Moment</Typography>
+                <Typography variant="h6" > {currentId ? 'Editing' : 'Creating' } a Moment </Typography>
                 <TextField
                     name="creator"
                     variant="outlined"
@@ -73,7 +80,7 @@ const Form = ({currentId, setCurrentId}) => {
                     fullWidth
                     value={postData.tags}
                     onChange={(e) =>
-                        setPostData({ ...postData, tags: e.target.value})}
+                        setPostData({ ...postData, tags: e.target.value.split(',')})}
                 />
                 <div className={classes.fileInput}>
                     <FileBase
@@ -93,11 +100,11 @@ const Form = ({currentId, setCurrentId}) => {
                     Submit
                 </Button>
                 <Button
-                        variant="contained"
-                        color="secondary"
-                        size="small"
-                        onClick={clear}
-                        fullWidth
+                    variant="contained"
+                    color="secondary"
+                    size="small"
+                    onClick={clear}
+                    fullWidth
                 >
                     Clear
                 </Button>

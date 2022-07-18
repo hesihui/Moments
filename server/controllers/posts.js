@@ -1,6 +1,7 @@
 import PostMessage from "../models/postMessage.js";
 import mongoose from "mongoose";
 
+// step 2: create a controller
 export const getPosts = async (req, res) => {
     try {
         const postMessages = await PostMessage.find();
@@ -30,7 +31,7 @@ export const createPost = async (req, res) => {
     try {
         await newPostMessage.save();
 
-        res.status(201).json(newPostMessage );
+        res.status(201).json(newPostMessage);
     } catch (error) {
         res.status(409).json({ message: error.message });
     }
@@ -38,11 +39,41 @@ export const createPost = async (req, res) => {
 
 export const updatePost = async (req, res) => {
     // id: _id  rename the param id to be _id
-    const { id: _id } = req.params;
-    const post = req.body;
+    const { id } = req.params;
+    const { title, message, creator, selectedFile, tags } = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(_id))
-        return res.status(404).send('No post with that id');
-    const updatedPost = await PostMessage.findByIdAndUpdate(_id, post, { new: true});
+    // check if id is valid
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
+
+    // Note: mongoDB default id key is '_id',
+    // so when we update the post, we need to map id to '_id'
+    const updatedPost = { creator, title, message, tags, selectedFile, _id: id };
+
+    await PostMessage.findByIdAndUpdate(id, updatedPost, { new: true });
+
+    res.json(updatedPost);
+}
+
+export const deletePost = async (req, res) => {
+    const { id } = req.params;
+
+    // check if id is valid
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
+
+    await PostMessage.findByIdAndRemove(id);
+
+    res.json({ message: 'Post deleted successfully'});
+}
+
+export const likePost = async (req, res) => {
+    const { id } = req.params;
+
+    // check if id is valid
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
+
+    const post = await PostMessage.findById(id);
+
+    const updatedPost = await PostMessage.findByIdAndUpdate(id, { likeCount: post.likeCount + 1 }, { new: true });
+
     res.json(updatedPost);
 }
