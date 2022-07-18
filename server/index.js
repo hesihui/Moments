@@ -17,7 +17,8 @@ app.use(cors());
 // localhost:5000/posts
 app.use('/posts', postRoutes);
 
-const PORT = process.env.PORT || 5000;
+// need extra .env file to config db and port
+const PORT = process.env.PORT;
 const CONNECTION_URL = process.env.CONNECTION_URL;
 
 mongoose.connect(CONNECTION_URL, { useNewUrlParser: true,
