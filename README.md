@@ -1,6 +1,6 @@
 # Moments
 
-## Tech Stack: Node.js, React.Js, Redux.Js, MongoDB, Express.js
+#### Tech Stack: Node.js, React.Js, Redux.Js, MongoDB, Express.js
 
 Moments is a fullstack MERN project. Some functioanlites for you to use:
 
