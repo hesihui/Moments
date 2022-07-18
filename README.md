@@ -4,4 +4,4 @@
 
 Moments is a fullstack MERN project. Some functioanlites for you to use:
 
-- Basic crud functioanlites: display posts, create a post, delete a post, like a post 
+- Basic crud functioanlites: display posts, create a post, update a post, delete a post, like a post 
