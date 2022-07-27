@@ -1,23 +1,37 @@
 import React, { useState } from 'react';
 import {Avatar, Button, Paper, Grid, Typography, Container, TextField} from "@material-ui/core";
 import { GoogleLogin } from 'react-google-login';
-
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import useStyles from './styles';
 
 import Input from './Input';
 import Icon from "./icon";
+import {useDispatch} from "react-redux";
+import {useHistory} from "react-router-dom";
+
+const initialState = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+}
 
 const Auth = () => {
     const classes = useStyles();
     const [showPassword, setShowPassword] = useState(false);
     const [isSignup, setIsSignUp] = useState(false);
+    const [formData, setFormData] = useState(initialState);
+    const dispatch = useDispatch();
+    const history = useHistory();
 
     const handleShowPassword = () => setShowPassword( (prevShowPassword) => !prevShowPassword);
 
-    const handleSubmit = () => {
-
+    const handleSubmit = (event) => {
+        // prevent reloading page after submitting the form
+        event.preventDefault();
+        console.log(formData);
     };
 
     const handleChange = () => {
@@ -30,7 +44,15 @@ const Auth = () => {
     };
 
     const googleSuccess = async (res) => {
-        console.log(res);
+        // FIX ME: need to use oauth 2.0
+        const result = res?.profileObj; // cannot get property profile obj of undefined
+        const token = res?.tokenID;
+        try {
+            dispatch({ type: 'AUTH', data: [result, token]});
+            history.push('/');
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const googleFailure = (error) => {
@@ -77,24 +99,24 @@ const Auth = () => {
                             />
                         }
                     </Grid>
-                    <GoogleLogin
-                        clientId=""
-                        render={(renderProps) => (
-                            <Button className={classes.googleButton}
-                                    color="primary"
-                                    fullWidth
-                                    onClick={renderProps.onClick}
-                                    disabled={renderProps.disabled}
-                                    startIcon={<Icon />}
-                                    variant="contained"
-                            >
-                                Google Sign In
-                            </Button>
-                        )}
-                        onSuccess={googleSuccess}
-                        onFailure={googleFailure}
-                        cookiePolicy="single_host_origin"
-                    />
+                    {/*<GoogleLogin*/}
+                    {/*    clientId=*/}
+                    {/*    render={(renderProps) => (*/}
+                    {/*        <Button className={classes.googleButton}*/}
+                    {/*                color="primary"*/}
+                    {/*                fullWidth*/}
+                    {/*                onClick={renderProps.onClick}*/}
+                    {/*                disabled={renderProps.disabled}*/}
+                    {/*                startIcon={<Icon />}*/}
+                    {/*                variant="contained"*/}
+                    {/*        >*/}
+                    {/*            Google Sign In*/}
+                    {/*        </Button>*/}
+                    {/*    )}*/}
+                    {/*    onSuccess={googleSuccess}*/}
+                    {/*    onFailure={googleFailure}*/}
+                    {/*    cookiePolicy="single_host_origin"*/}
+                    {/*/>*/}
                     <Button type="submit" fullWidth variant="contained" color="primary"
                         className={classes.submit}
                     >
