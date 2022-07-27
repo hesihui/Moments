@@ -1,5 +1,3 @@
-
-
 import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
@@ -16,7 +14,7 @@ export default makeStyles((theme) => ({
         },
     },
     avatar: {
-        margin: theme.spacing(1),
+        alignItems: 'center',
         backgroundColor: theme.palette.secondary.main,
     },
     form: {
@@ -27,6 +25,6 @@ export default makeStyles((theme) => ({
         margin: theme.spacing(3, 0, 2),
     },
     googleButton: {
-        marginBottom: theme.spacing(2),
+        marginTop: theme.spacing(2)
     },
 }));
