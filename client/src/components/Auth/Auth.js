@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import {Avatar, Button, Paper, Grid, Typography, Container, TextField} from "@material-ui/core";
 import { GoogleLogin } from 'react-google-login';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-
+import {useDispatch} from "react-redux";
+import {useHistory} from "react-router-dom";
 import useStyles from './styles';
 
 import Input from './Input';
 import Icon from "./icon";
-import {useDispatch} from "react-redux";
-import {useHistory} from "react-router-dom";
+import { signin, signup } from '../../actions/auth';
 
 const initialState = {
     firstName: '',
@@ -32,11 +32,16 @@ const Auth = () => {
         // prevent reloading page after submitting the form
         event.preventDefault();
         console.log(formData);
+        if (isSignup) {
+            dispatch(signup(formData, history));
+        } else {
+            dispatch(signin(formData, history));
+        }
     };
 
-    const handleChange = () => {
-
-    }
+    const handleChange = (event) => {
+        setFormData({ ...formData, [event.target.name]: event.target.value})
+    };
 
     const switchMode = () => {
         setIsSignUp((prevIsSignUp) => !prevIsSignUp);

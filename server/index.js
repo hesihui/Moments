@@ -3,6 +3,7 @@ import bodyParse from 'body-parser';
 import mongoose from "mongoose";
 import cors from 'cors';
 import postRoutes from "./routes/posts.js";
+import userRoutes from "./routes/users.js";
 import dotenv from 'dotenv';
 
 const app = express();
@@ -16,7 +17,7 @@ app.use(cors());
 // set up the starting path
 // localhost:5000/posts
 app.use('/posts', postRoutes);
-
+app.use('/user',userRoutes);
 // need extra .env file to config db and port
 const PORT = process.env.PORT;
 const CONNECTION_URL = process.env.CONNECTION_URL;
