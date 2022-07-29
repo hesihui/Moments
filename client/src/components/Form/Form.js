@@ -10,11 +10,12 @@ import { createPost, updatePost } from "../../actions/posts";
 
 const Form = ({ currentId, setCurrentId }) => {
     const [postData, setPostData] = useState({
-        creator: '', title: '', message: '', tags: '', selectedFile: ''
+         title: '', message: '', tags: '', selectedFile: ''
     });
     const classes = useStyles();
     const dispatch = useDispatch();
     const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null);
+    const user = JSON.parse(localStorage.getItem('profile'));
 
     // second param: dependency array
     // when the values of dependency array changes, we call the function call-back function
@@ -26,11 +27,11 @@ const Form = ({ currentId, setCurrentId }) => {
         e.preventDefault();
         if (currentId) {
             // if current post id exists, just update
-            dispatch(updatePost(currentId, postData));
+            dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }));
             clear();
         } else {
             // otherwise, it's a create task
-            dispatch(createPost(postData));
+            dispatch(createPost({ ...postData, name: user?.result?.name }));
             clear();
         }
     }
@@ -38,23 +39,23 @@ const Form = ({ currentId, setCurrentId }) => {
     const clear = () => {
         setCurrentId(0);
         setPostData(
-            { creator: '', title: '', message: '', tags: '', selectedFile: '' });
+            { title: '', message: '', tags: '', selectedFile: '' });
     };
 
+    if (!user?.result?.name) {
+        return (
+            <Paper className={classes.paper}>
+                <Typography variant="h6" align="center">
+                    Please Sign In to create your own posts and like others' posts!
+                </Typography>
+            </Paper>
+        )
+    }
 
     return (
         <Paper className={classes.paper} s>
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
                 <Typography variant="h6" > {currentId ? 'Editing' : 'Creating' } a Moment </Typography>
-                <TextField
-                    name="creator"
-                    variant="outlined"
-                    label="Creator"
-                    fullWidth
-                    value={postData.creator}
-                    onChange={(e) =>
-                        setPostData({ ...postData, creator: e.target.value})}
-                />
                 <TextField
                     name="title"
                     variant="outlined"
