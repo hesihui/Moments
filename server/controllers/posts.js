@@ -22,6 +22,22 @@ export const getPost = async (req, res) => {
     }
 }
 
+// QUERY => /posts?page=1 => page = 1 query some data, such as search
+// Params => /posts/:id => get some specific resources
+export const getPostsBySearch = async (req, res) => {
+    const { searchQuery, tags } = req.query;
+    try {
+        // i stands ignore lower and upper case, thus test = TEST = Test
+        const title = new RegExp(searchQuery, 'i');
+        // $or stands find all the posts that match one o0f those two criteria
+
+        const posts = await PostMessage.find({ $or: [{ title }, {tags: {$in: tags.split(',')} } ] });
+
+    } catch (error) {
+
+    }
+}
+
 
 export const createPost = async (req, res) => {
     const post = req.body;
