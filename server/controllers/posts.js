@@ -30,11 +30,10 @@ export const getPostsBySearch = async (req, res) => {
         // i stands ignore lower and upper case, thus test = TEST = Test
         const title = new RegExp(searchQuery, 'i');
         // $or stands find all the posts that match one o0f those two criteria
-
-        const posts = await PostMessage.find({ $or: [{ title }, {tags: {$in: tags.split(',')} } ] });
-
+        const posts = await PostMessage.find({ $or: [{ title }, {tags: { $in: tags.split(',')} } ] });
+        res.json({ data: posts});
     } catch (error) {
-
+        res.status(404).json({ message: error.message });
     }
 }
 
