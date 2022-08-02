@@ -7,7 +7,7 @@ const router = express.Router();
 // step1: create a router
 router.get('/', getPosts);
 router.get('/:id', getPost);
-router.get('/search',getPostsBySearch);
+router.get('/search', getPostsBySearch);
 router.post('/', auth, createPost);
 // patch is for updating exsting documents
 // :id means dynamic
