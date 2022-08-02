@@ -1,11 +1,13 @@
-import * as api from '../api';
-import { FETCH_ALL, CREATE, UPDATE, DELETE, FETCH_BY_SEARCH } from "../constants/actionTypes";
-import {fetchPosts} from "../api";
+import { START_LOADING, END_LOADING, FETCH_ALL, FETCH_POST, FETCH_BY_SEARCH, CREATE, UPDATE, DELETE, LIKE } from '../constants/actionTypes';
+import * as api from '../api/index.js';
+
 // Actions creators
 export const getPosts = (page) => async (dispatch) => {
     try {
-        const { data } = await api.fetchPosts(page);
-        dispatch({type: FETCH_ALL, payload: data});
+        dispatch({ type: START_LOADING });
+        const { data: { data, currentPage, numberOfPages } } = await api.fetchPosts(page);
+        dispatch({ type: FETCH_ALL, payload: { data, currentPage, numberOfPages } });
+        dispatch({ type: END_LOADING });
     } catch (error) {
         console.log(error.message);
     }
@@ -13,6 +15,7 @@ export const getPosts = (page) => async (dispatch) => {
 
 export const createPost = (post) => async (dispatch) => {
     try {
+        dispatch({ type: START_LOADING });
         const { data } = await api.createPost(post);
         dispatch({ type: CREATE, payload: data });
     } catch (error) {
@@ -25,9 +28,10 @@ export const getPostsBySearch = (searchQuery) => async (dispatch) => {
         // destructure data const { data } = await api.xxx
         // also from server, the response is res.json({ data: posts});,
         // thus we need to destructure the data for two times
+        dispatch({ type: START_LOADING });
         const { data: { data } } = await api.fetchPostsBySearch(searchQuery);
-        dispatch({ type: FETCH_BY_SEARCH, payload: data });
-        console.log(data);
+        dispatch({ type: FETCH_BY_SEARCH, payload: { data } });
+        dispatch({ type: END_LOADING });
     } catch (error) {
         console.log(error);
     }
