@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Container, Grid, Grow, Paper, AppBar, TextField, Button } from "@material-ui/core";
 import Posts from "../Posts/Posts";
 import Form from "../Form/Form";
@@ -6,7 +6,7 @@ import useStyles from './styles';
 import { useDispatch } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import ChipInput from "material-ui-chip-input";
-import { getPosts, getPostsBySearch } from "../../actions/posts";
+import { getPostsBySearch } from "../../actions/posts";
 import Pagination from "../Pagination";
 
 function useQuery() {
@@ -14,13 +14,8 @@ function useQuery() {
 }
 
 const Home = () => {
-    const [currentId, setCurrentId] = useState(null);
-    const [search, setSearch] = useState('');
-    const [tags, setTags] = useState([]);
     const classes = useStyles();
-    const dispatch = useDispatch();
     const query = useQuery();
-    const history = useHistory();
     // read url to see if we have a page param there
     const page = query.get('page') || 1;
     const searchQuery = query.get('searchQuery');
@@ -28,34 +23,34 @@ const Home = () => {
     // why add currentID:
     // since each time we update the current post info, it will change the currentId
     // we then need to get new posts for each updating task done
-    useEffect(() => {
-        dispatch(getPosts());
-    },[currentId, dispatch]);
+    const [currentId, setCurrentId] = useState(0);
+    const dispatch = useDispatch();
+
+    const [search, setSearch] = useState('');
+    const [tags, setTags] = useState([]);
+    const history = useHistory();
 
     const searchPost = () => {
         if (search.trim() || tags) {
-            // dispatch => fetch search post
-            dispatch(getPostsBySearch({search, tags: tags.join(',')}));
+            dispatch(getPostsBySearch({ search, tags: tags.join(',') }));
             history.push(`/posts/search?searchQuery=${search || 'none'}&tags=${tags.join(',')}`);
         } else {
             history.push('/');
         }
-    }
+    };
 
-    const handleKePress = (event) => {
+    const handleKeyPress = (event) => {
         if (event.keyCode === 13) {
             // search post
             searchPost();
         }
     };
 
-    const handleAdd = (tag) => {
-        setTags([ ...tags, tag]);
-    }
 
-    const handleDelete = (tagToBeDeleted) => {
-        setTags(tags.filter((tag) => tag !== tagToBeDeleted));
-    }
+    const handleAddChip = (tag) => setTags([...tags, tag]);
+
+    const handleDeleteChip = (chipToDelete) => setTags(tags.filter((tag) => tag !== chipToDelete));
+
 
     return (
         <Grow in>
@@ -69,9 +64,9 @@ const Home = () => {
                             <TextField name="search"
                                        variant="outlined"
                                        label="Search Moments"
-                                       fullWidth value="TEST"
+                                       fullWidth
                                        value={search}
-                                       onKeyPress={handleKePress}
+                                       onKeyPress={handleKeyPress}
                                        onChange={ (event) => {
                                             setSearch(event.target.value);
                                        }}
@@ -79,8 +74,8 @@ const Home = () => {
                             <ChipInput
                                 style={{ margin: '10px 0'}}
                                 value={tags}
-                                onAdd={handleAdd}
-                                onDelete={handleDelete}
+                                onAdd={handleAddChip}
+                                onDelete={handleDeleteChip}
                                 label="Search Tags"
                                 variant="outlined"
                             />
@@ -93,9 +88,11 @@ const Home = () => {
                             </Button>
                         </AppBar>
                         <Form currentId={currentId} setCurrentId={setCurrentId}/>
-                        <Paper elevation={6}>
-                            <Pagination page={page}/>
-                        </Paper>
+                        {(!searchQuery && !tags.length) && (
+                            <Paper className={classes.pagination} elevation={6}>
+                                <Pagination page={page} />
+                            </Paper>
+                        )}
                     </Grid>
                 </Grid>
             </Container>

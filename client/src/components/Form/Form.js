@@ -14,7 +14,7 @@ const Form = ({ currentId, setCurrentId }) => {
     });
     const classes = useStyles();
     const dispatch = useDispatch();
-    const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null);
+    const post = useSelector((state) => (currentId ? state.posts.posts.find((message) => message._id === currentId) : null));
     const user = JSON.parse(localStorage.getItem('profile'));
 
     // second param: dependency array
@@ -53,7 +53,7 @@ const Form = ({ currentId, setCurrentId }) => {
     }
 
     return (
-        <Paper className={classes.paper} s>
+        <Paper className={classes.paper} elevation={6}>
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
                 <Typography variant="h6" > {currentId ? 'Editing' : 'Creating' } a Moment </Typography>
                 <TextField
