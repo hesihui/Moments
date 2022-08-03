@@ -112,3 +112,17 @@ export const likePost = async (req, res) => {
     const updatedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true });
     res.status(200).json(updatedPost);
 }
+
+export const commentPost = async (req, res) => {
+    const { id } = req.params;
+    const { value } = req.body;
+
+    // getting the corresponding post from database
+    const post = await PostMessage.findById(id);
+    // add comments to the old post
+    post.comments.push(value);
+
+    // update the new post with post id
+    const updatedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true});
+    res.json(updatedPost);
+}
