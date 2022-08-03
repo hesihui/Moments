@@ -35,23 +35,11 @@ export const createPost = (post, history) => async (dispatch) => {
     }
 };
 
-// export const getPostsBySearch = (searchQuery) => async (dispatch) => {
-//     try {
-//         // destructure data const { data } = await api.xxx
-//         // also from server, the response is res.json({ data: posts});,
-//         // thus we need to destructure the data for two times
-//         dispatch({ type: START_LOADING });
-//         const { data: { data } } = await api.fetchPostsBySearch(searchQuery);
-//
-//         dispatch({ type: FETCH_BY_SEARCH, payload: { data } });
-//         dispatch({ type: END_LOADING });
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
-
 export const getPostsBySearch = (searchQuery) => async (dispatch) => {
     try {
+        // destructure data const { data } = await api.xxx
+        // also from server, the response is res.json({ data: posts});,
+        // thus we need to destructure the data for two times
         dispatch({ type: START_LOADING });
         const { data: { data } } = await api.fetchPostsBySearch(searchQuery);
 
@@ -60,12 +48,14 @@ export const getPostsBySearch = (searchQuery) => async (dispatch) => {
     } catch (error) {
         console.log(error);
     }
-};
+}
 
-export const updatePost = (id, post) => async (dispatch) => {
+
+export const updatePost = (id, post, history) => async (dispatch) => {
     try {
         const { data } = await api.updatePost(id, post);
         // execute updatePost functionality and get the current data as response
+        history.push(`/posts/${data._id}`);
         dispatch({type: UPDATE, payload: data});
     } catch (error) {
         console.log(error.message);
