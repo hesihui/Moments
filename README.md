@@ -1,8 +1,10 @@
-# Moments
+# Moments: Mark Your Own Memories 
 
 ### Tech Stack: Node.js, React.Js, Redux.Js, MongoDB, Express.js
 
 Moments is a fullstack MERN social media app. You can share your own highlight moments with others! 
+
+For fully running the app:  enter both client and server folder, `npm install` and `npm start`. For backend database connection, check .env.example 
 
  Some functioanlites for you to use:
 
