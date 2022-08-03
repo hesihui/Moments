@@ -28,7 +28,7 @@ const Form = ({ currentId, setCurrentId }) => {
         e.preventDefault();
         if (currentId) {
             // if current post id exists, just update
-            dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }));
+            dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }, history ));
             clear();
         } else {
             // otherwise, it's a create task
