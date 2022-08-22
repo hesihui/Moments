@@ -30,7 +30,7 @@ Sample Demo Pic:
 
 <img src="https://raw.githubusercontent.com/hesihui/Moments/main/sample_pic/detailed_page.png" alt="detailedPage" />
 
-Data Model:
+#### Data Model:
 
 Post: 
 
@@ -53,7 +53,7 @@ Post:
 
 User Info
 
-```json
+```
 {
     name: { type: String, required: true},
     email: { type: String, required: true },
@@ -63,3 +63,10 @@ User Info
 }
 ```
 
+### Resource 
+
+Mongoose Documentation: https://mongoosejs.com/docs/api.html
+
+MongoDB Atlas setup: https://hevodata.com/learn/mongodb-atlas-nodejs/
+
+Redux Documentation: https://redux.js.org/introduction/getting-started
